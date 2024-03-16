@@ -14,7 +14,10 @@ app.use(express.json());
 connectDB(); //connecting to DB
 
 app.use('/api/v1/user/auth', userAuthRouter);
-app.use('/api/v1/admin/auth', adminAuthRouter)
+app.use('/api/v1/admin/auth', adminAuthRouter);
+app.get('/', (req, res) => {
+    res.send('Service is running fine bro dont worry')
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running fine on ${PORT}`);
