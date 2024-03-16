@@ -1,0 +1,4 @@
+- Adding more questions in the lessons  [-]
+- **Very Important** Use sockets or relevent feature to add a new Tab on the Header for 'Compete' where user can compete with each other and their score is visible at the end of the match. [--] 
+- Admin pannel view betterment [-] 
+- Improve the coding practices [-]

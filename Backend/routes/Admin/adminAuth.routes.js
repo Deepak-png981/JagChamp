@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, signin, createLesson, getAllLessons, updateLesson, getLesson, deleteLesson } = require('../../controllers/Admin/adminAuth.controller');
+const { signup, signin, createLesson, getAllLessons, updateLesson, getLesson, deleteLesson, getAllUsers } = require('../../controllers/Admin/adminAuth.controller');
 const { isAdminAuthenticated } = require('../../middleware/authMiddleware');
 const router = express.Router();
 
@@ -12,4 +12,5 @@ router.post('/lesson/:id', isAdminAuthenticated, updateLesson);
 router.get('/lessons', isAdminAuthenticated, getAllLessons);
 router.get('/lesson/:id', isAdminAuthenticated, getLesson);
 router.delete('/lesson/:id', isAdminAuthenticated, deleteLesson)
+router.get('/all-user', isAdminAuthenticated, getAllUsers)
 module.exports = router;

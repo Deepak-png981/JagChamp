@@ -6,7 +6,7 @@ const signup = async (req, res) => {
     try {
         const { name, email, password, mobileNumber, className } = req.body;
         // email , password 
-        console.log('Inside the signup with email : ', email);
+        // console.log('Inside the signup with email : ', email);
         if (!name || !email || !password || !mobileNumber || !className)
             return res.status(404).json({ message: 'Fields cannot be empty' });
         const existingUser = await User.findOne({ email });
@@ -25,6 +25,7 @@ const signup = async (req, res) => {
             className
         });
         await newUser.save();
+        // console.log("User created successfully");
         return res.status(201).json({ message: 'User Created Successfully' });
 
     } catch (error) {
@@ -34,7 +35,7 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log("Inside the signin with email : ", email);
+        // console.log("Inside the signin with email : ", email);
         if (!email || !password)
             return res.status(400).json({ message: 'Email or Password is required' });
         const user = await User.findOne({ email });
@@ -49,9 +50,9 @@ const signin = async (req, res) => {
             }
         };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.json({ token, user });
         });
 
     } catch (error) {
@@ -62,6 +63,7 @@ const signin = async (req, res) => {
 const getAllLessons = async (req, res) => {
     try {
         const lessons = await Lesson.find({});
+        // console.log("Inside getAllLessons  : ", lessons);
         return res.status(200).json({ length: lessons.length, lessons: lessons });
     } catch (error) {
         console.log('Error occured while getting all the lessons : ', error);
@@ -71,6 +73,7 @@ const getAllLessons = async (req, res) => {
 const getLessonByID = async (req, res) => {
     try {
         const { id } = req.params;
+        console.log("id : ", id);
         const lesson = await Lesson.findOne({ _id: id });
         if (!lesson)
             return res.status(404).json({ message: `Lesson with ID ${id} does not exists` });

@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.get('/lessons', isUserAuthenticated, getAllLessons);
-router.get('/lessons/:id', isUserAuthenticated, getLessonByID);
+router.get('/lesson/:id', isUserAuthenticated, getLessonByID);
 
 
 module.exports = router;

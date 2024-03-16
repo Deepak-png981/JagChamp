@@ -30,6 +30,7 @@ const isAdminAuthenticated = async (req, res, next) => {
 
 const isUserAuthenticated = async (req, res, next) => {
     try {
+        // console.log("STARTING USER AUTHENTICATION");
         const authHeaders = req.headers.authorization;
         if (!authHeaders || !authHeaders.startsWith('Bearer ')) {
             return res.status(401).json({ message: 'Authorization denied.' });
@@ -47,6 +48,8 @@ const isUserAuthenticated = async (req, res, next) => {
             return res.status(403).json({ message: 'Forbidden.' })
         }
         req.user = user;
+        // console.log("ENDING USER AUTHENTICATION");
+
         next();
     } catch (error) {
         console.error('Errro authenticating user : ', error);

@@ -1,5 +1,6 @@
 const Admin = require('../../models/Admin');
 const Lesson = require('../../models/Lesson');
+const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const signup = async (req, res) => {
@@ -31,7 +32,7 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log("Inside the signin with email : ", email);
+        console.log("Inside the signin with email of ADMIN : ", email);
         if (!email || !password)
             return res.status(400).json({ message: 'Email or Password is required' });
         const admin = await Admin.findOne({ email });
@@ -46,7 +47,7 @@ const signin = async (req, res) => {
             }
         };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30d' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
         });
@@ -82,7 +83,6 @@ const createLesson = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
 const getAllLessons = async (req, res) => {
     try {
         const lessons = await Lesson.find({});
@@ -97,6 +97,7 @@ const updateLesson = async (req, res) => {
     try {
         const { id } = req.params;
         const { lessonNumber, title, content, mcqs } = req.body;
+        console.log("less : ", lessonNumber);
         if (!lessonNumber || !title || !content || !mcqs || !Array.isArray(mcqs) || mcqs.length === 0) {
             return res.status(400).json({ message: 'Invalid lesson data. Make sure lessonNumber, title, content, and mcqs are provided in correct format' });
         }
@@ -111,7 +112,7 @@ const updateLesson = async (req, res) => {
         lesson.mcqs = mcqs;
 
         await lesson.save();
-
+        console.log("Updated lesson");
         res.status(200).json({ message: `Lesson with ID ${id} updated successfully`, lesson });
     } catch (error) {
         console.error("Error occurred while updating the lesson:", error);
@@ -146,6 +147,17 @@ const deleteLesson = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, '-password');
+        res.status(200).json({ length: users.length, users: users });
+    } catch (error) {
+        console.error('Error occurred while fetching users:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 module.exports = {
     signup,
     signin,
@@ -153,5 +165,6 @@ module.exports = {
     getAllLessons,
     updateLesson,
     getLesson,
-    deleteLesson
+    deleteLesson,
+    getAllUsers
 }
